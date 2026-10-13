@@ -3,89 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лесной Кубатурник УГЛТУ</title>
+    <title>Профессиональный Кубатурник | Расчет лесоматериалов</title>
     <style>
-        body { font-family: -apple-system, system-ui, sans-serif; background: #f4f7f4; padding: 15px; color: #333; }
-        .box { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        body { font-family: sans-serif; background: #eef2ee; padding: 15px; color: #333; }
+        .box { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h1 { color: #1e4620; text-align: center; font-size: 22px; margin-bottom: 5px; }
         .sub { text-align: center; font-size: 13px; color: #666; margin-bottom: 20px; }
-        .tabs { display: flex; gap: 8px; margin-bottom: 25px; }
-        .tab-btn { flex: 1; padding: 12px; background: #e4ebe4; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; color: #1e4620; font-size: 14px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 12px; background: #e2ebe2; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: #1e4620; }
         .tab-btn.active { background: #1e4620; color: #fff; }
         .panel { display: none; }
         .panel.active { display: block; }
         .group { margin-bottom: 15px; }
-        .group label { display: block; margin-bottom: 6px; font-weight: bold; font-size: 14px; }
-        .group input, .group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
-        .group input:focus { border-color: #1e4620; }
-        .out { background: #1e4620; padding: 18px; border-radius: 12px; margin-top: 25px; color: #fff; }
-        .out-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 16px; }
-        .out-row:last-child { margin-bottom: 0; }
-        .out-val { font-weight: bold; color: #d4a373; font-size: 18px; }
+        .group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        .group input, .group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        .btn { width: 100%; padding: 12px; background: #2d6a4f; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .btn:hover { background: #1e4620; }
+        .table-box { margin-top: 25px; border-top: 2px solid #ddd; padding-top: 15px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
+        th { background: #f4f4f4; }
+        .total { background: #1e4620; color: #fff; padding: 15px; border-radius: 6px; margin-top: 15px; font-weight: bold; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
+
 <div class="box">
-    <h1>🌲 Лесной Кубатурник</h1>
-    <div class="sub">Специально для студентов и мастеров УГЛТУ</div>
+    <h1>🌲 Профессиональный Лесной Калькулятор</h1>
+    <div class="sub">Расчет объема, веса и ведение спецификации онлайн</div>
+    
     <div class="tabs">
         <button id="b-round" class="tab-btn active" onclick="setTab('round')">Круглый лес</button>
         <button id="b-lumber" class="tab-btn" onclick="setTab('lumber')">Пиломатериалы</button>
     </div>
+
     <div id="p-round" class="panel active">
-        <div class="group"><label>Верхний диаметр бревна (см)</label><input type="number" id="r-d" value="20" oninput="run()"></div>
-        <div class="group"><label>Длина бревна (м)</label><input type="number" id="r-l" value="6" oninput="run()"></div>
-        <div class="group"><label>Количество брёвен (шт)</label><input type="number" id="r-c" value="1" oninput="run()"></div>
+        <div class="group"><label>Диаметр бревна в верхнем торце (см)</label><input type="number" id="r-d" value="20"></div>
+        <div class="group"><label>Длина бревна (м)</label><input type="number" id="r-l" value="6"></div>
+        <div class="group"><label>Количество (шт)</label><input type="number" id="r-c" value="1"></div>
     </div>
+
     <div id="p-lumber" class="panel">
-        <div class="group"><label>Толщина доски (мм)</label><input type="number" id="l-t" value="50" oninput="run()"></div>
-        <div class="group"><label>Ширина доски (мм)</label><input type="number" id="l-w" value="150" oninput="run()"></div>
-        <div class="group"><label>Длина доски (м)</label><input type="number" id="l-l" value="6" oninput="run()"></div>
-        <div class="group"><label>Количество (шт)</label><input type="number" id="l-c" value="1" oninput="run()"></div>
+        <div class="group"><label>Толщина доски/бруса (мм)</label><input type="number" id="l-t" value="50"></div>
+        <div class="group"><label>Ширина доски/бруса (мм)</label><input type="number" id="l-w" value="150"></div>
+        <div class="group"><label>Длина доски (м)</label><input type="number" id="l-l" value="6"></div>
+        <div class="group"><label>Количество (шт)</label><input type="number" id="l-c" value="1"></div>
     </div>
+
     <div class="group">
-        <label>Порода дерева (для веса)</label>
-        <select id="w-type" onchange="run()">
+        <label>Порода дерева (для расчета массы)</label>
+        <select id="w-type">
             <option value="0.52">Сосна / Ель свежая (~520 кг/м³)</option>
             <option value="0.80">Лиственница свежая (~800 кг/м³)</option>
             <option value="0.70">Береза свежая (~700 кг/м³)</option>
         </select>
     </div>
-    <div class="out">
-        <div class="out-row"><span>Общий объем:</span><span class="out-val" id="res-v">0.000 м³</span></div>
-        <div class="out-row"><span>Примерный вес груза:</span><span class="out-val" id="res-w">0.00 т</span></div>
+
+    <button class="btn" onclick="addRows()">Добавить замер в журнал</button>
+
+    <div class="table-box">
+        <h3>📋 Журнал замеров (Спецификация)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Тип материала</th>
+                    <th>Размеры</th>
+                    <th>Кол-во</th>
+                    <th>Объем</th>
+                    <th>Вес</th>
+                </tr>
+            </thead>
+            <tbody id="t-body"></tbody>
+        </table>
+    </div>
+
+    <div class="total">
+        <div id="total-v">Всего кубов: 0.000 м³</div>
+        <div id="total-w">Общий вес: 0.00 т</div>
     </div>
 </div>
+
 <script>
     let mode = 'round';
+    let rows = [];
+
     function setTab(t) {
         mode = t;
         document.getElementById('b-round').classList.toggle('active', t === 'round');
         document.getElementById('b-lumber').classList.toggle('active', t === 'lumber');
         document.getElementById('p-round').classList.toggle('active', t === 'round');
         document.getElementById('p-lumber').classList.toggle('active', t === 'lumber');
-        run();
     }
-    function run() {
-        let v = 0;
+
+    function addRows() {
         let dens = parseFloat(document.getElementById('w-type').value);
+        let v = 0, count = 0, sizeStr = '', typeStr = '';
+
         if (mode === 'round') {
             let d = parseFloat(document.getElementById('r-d').value) || 0;
             let l = parseFloat(document.getElementById('r-l').value) || 0;
-            let c = parseInt(document.getElementById('r-c').value) || 0;
+            count = parseInt(document.getElementById('r-c').value) || 0;
             let radius = (d / 100) / 2;
-            v = Math.PI * Math.pow(radius, 2) * l * 0.85 * c;
+            v = Math.PI * Math.pow(radius, 2) * l * 0.85 * count;
+            sizeStr = d + 'см x ' + l + 'м';
+            typeStr = 'Кругляк';
         } else {
             let th = parseFloat(document.getElementById('l-t').value) || 0;
             let wd = parseFloat(document.getElementById('l-w').value) || 0;
             let ln = parseFloat(document.getElementById('l-l').value) || 0;
-            let c = parseInt(document.getElementById('l-c').value) || 0;
-            v = (th / 1000) * (wd / 1000) * ln * c;
+            count = parseInt(document.getElementById('l-c').value) || 0;
+            v = (th / 1000) * (wd / 1000) * ln * count;
+            sizeStr = th + 'x' + wd + 'мм, ' + ln + 'м';
+            typeStr = 'Пиломатериал';
         }
-        document.getElementById('res-v').innerText = v.toFixed(3) + ' м³';
-        document.getElementById('res-w').innerText = (v * dens).toFixed(2) + ' т';
+
+        if (v > 0 && count > 0) {
+            rows.push({ type: typeStr, size: sizeStr, qty: count, vol: v, wgt: v * dens });
+            renderTable();
+        }
     }
-    window.onload = run;
+
+    function renderTable() {
+        let body = document.getElementById('t-body');
+        body.innerHTML = '';
+        let sumV = 0, sumW = 0;
+
+        rows.forEach((r, i) => {
+            sumV += r.vol;
+            sumW += r.wgt;
+            let tr = document.createElement('tr');
+            tr.innerHTML = '<td>' + (i+1) + '</td><td>' + r.type + '</td><td>' + r.size + '</td><td>' + r.qty + ' шт</td><td>' + r.vol.toFixed(3) + ' м³</td><td>' + r.wgt.toFixed(2) + ' т</td>';
+            body.appendChild(tr);
+        });
+
+        document.getElementById('total-v').innerText = 'Всего кубов: ' + sumV.toFixed(3) + ' м³';
+        document.getElementById('total-w').innerText = 'Общий вес: ' + sumW.toFixed(2) + ' т';
+    }
 </script>
 </body>
 </html>
