@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лесной Кубатурник УГЛТУ</title>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; background: #f4f7f4; padding: 15px; color: #333; }
+        .box { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h1 { color: #1e4620; text-align: center; font-size: 22px; margin-bottom: 5px; }
+        .sub { text-align: center; font-size: 13px; color: #666; margin-bottom: 20px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 25px; }
+        .tab-btn { flex: 1; padding: 12px; background: #e4ebe4; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; color: #1e4620; font-size: 14px; }
+        .tab-btn.active { background: #1e4620; color: #fff; }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .group { margin-bottom: 15px; }
+        .group label { display: block; margin-bottom: 6px; font-weight: bold; font-size: 14px; }
+        .group input, .group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
+        .group input:focus { border-color: #1e4620; }
+        .out { background: #1e4620; padding: 18px; border-radius: 12px; margin-top: 25px; color: #fff; }
+        .out-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 16px; }
+        .out-row:last-child { margin-bottom: 0; }
+        .out-val { font-weight: bold; color: #d4a373; font-size: 18px; }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h1>🌲 Лесной Кубатурник</h1>
+    <div class="sub">Специально для студентов и мастеров УГЛТУ</div>
+    <div class="tabs">
+        <button id="b-round" class="tab-btn active" onclick="setTab('round')">Круглый лес</button>
+        <button id="b-lumber" class="tab-btn" onclick="setTab('lumber')">Пиломатериалы</button>
+    </div>
+    <div id="p-round" class="panel active">
+        <div class="group"><label>Верхний диаметр бревна (см)</label><input type="number" id="r-d" value="20" oninput="run()"></div>
+        <div class="group"><label>Длина бревна (м)</label><input type="number" id="r-l" value="6" oninput="run()"></div>
+        <div class="group"><label>Количество брёвен (шт)</label><input type="number" id="r-c" value="1" oninput="run()"></div>
+    </div>
+    <div id="p-lumber" class="panel">
+        <div class="group"><label>Толщина доски (мм)</label><input type="number" id="l-t" value="50" oninput="run()"></div>
+        <div class="group"><label>Ширина доски (мм)</label><input type="number" id="l-w" value="150" oninput="run()"></div>
+        <div class="group"><label>Длина доски (м)</label><input type="number" id="l-l" value="6" oninput="run()"></div>
+        <div class="group"><label>Количество (шт)</label><input type="number" id="l-c" value="1" oninput="run()"></div>
+    </div>
+    <div class="group">
+        <label>Порода дерева (для веса)</label>
+        <select id="w-type" onchange="run()">
+            <option value="0.52">Сосна / Ель свежая (~520 кг/м³)</option>
+            <option value="0.80">Лиственница свежая (~800 кг/м³)</option>
+            <option value="0.70">Береза свежая (~700 кг/м³)</option>
+        </select>
+    </div>
+    <div class="out">
+        <div class="out-row"><span>Общий объем:</span><span class="out-val" id="res-v">0.000 м³</span></div>
+        <div class="out-row"><span>Примерный вес груза:</span><span class="out-val" id="res-w">0.00 т</span></div>
+    </div>
+</div>
+<script>
+    let mode = 'round';
+    function setTab(t) {
+        mode = t;
+        document.getElementById('b-round').classList.toggle('active', t === 'round');
+        document.getElementById('b-lumber').classList.toggle('active', t === 'lumber');
+        document.getElementById('p-round').classList.toggle('active', t === 'round');
+        document.getElementById('p-lumber').classList.toggle('active', t === 'lumber');
+        run();
+    }
+    function run() {
+        let v = 0;
+        let dens = parseFloat(document.getElementById('w-type').value);
+        if (mode === 'round') {
+            let d = parseFloat(document.getElementById('r-d').value) || 0;
+            let l = parseFloat(document.getElementById('r-l').value) || 0;
+            let c = parseInt(document.getElementById('r-c').value) || 0;
+            let radius = (d / 100) / 2;
+            v = Math.PI * Math.pow(radius, 2) * l * 0.85 * c;
+        } else {
+            let th = parseFloat(document.getElementById('l-t').value) || 0;
+            let wd = parseFloat(document.getElementById('l-w').value) || 0;
+            let ln = parseFloat(document.getElementById('l-l').value) || 0;
+            let c = parseInt(document.getElementById('l-c').value) || 0;
+            v = (th / 1000) * (wd / 1000) * ln * c;
+        }
+        document.getElementById('res-v').innerText = v.toFixed(3) + ' м³';
+        document.getElementById('res-w').innerText = (v * dens).toFixed(2) + ' т';
+    }
+    window.onload = run;
+</script>
+</body>
+</html>
